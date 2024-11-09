@@ -26,9 +26,9 @@ async function extractLinks(page: PDFPageProxy) {
   try {
     const annotations = await page.getAnnotations();
     return annotations
-      .filter((annotation: any) => 
-        annotation.subtype === 'Link' && 
-        annotation.url && 
+      .filter((annotation: any) =>
+        annotation.subtype === 'Link' &&
+        annotation.url &&
         annotation.url.trim() !== ''
       )
       .map((link: any) => ({
@@ -108,7 +108,7 @@ export async function processPDF(file: File) {
   try {
     const timestamp = Date.now();
     const fileName = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-    
+
     // Upload original PDF
     const pdfPath = `documents/${fileName}`;
     await uploadWithRetry('pdfs', pdfPath, file);
@@ -116,7 +116,7 @@ export async function processPDF(file: File) {
     // Process PDF
     const arrayBuffer = await file.arrayBuffer();
     const worker = getWorker();
-    
+
     if (!worker) {
       throw new Error('PDF worker not initialized');
     }
@@ -136,7 +136,7 @@ export async function processPDF(file: File) {
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
       try {
         const page = await pdf.getPage(pageNum);
-        
+
         // Extract content in parallel
         const [text, links, screenshotBlob] = await Promise.all([
           extractPageContent(page),
@@ -167,7 +167,7 @@ export async function processPDF(file: File) {
     }
 
     // Save metadata to database
-    const { error: dbError } = await supabase
+    const { data, error: dbError } = await supabase
       .from('pdf_documents')
       .insert({
         filename: file.name,
@@ -182,7 +182,7 @@ export async function processPDF(file: File) {
       throw new Error(`Database update failed: ${dbError.message}`);
     }
 
-    return { pages };
+    return { id: data.id, pages };
   } catch (error: any) {
     console.error('PDF processing error:', error);
     throw new Error(

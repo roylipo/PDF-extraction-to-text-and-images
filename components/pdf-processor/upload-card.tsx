@@ -35,10 +35,10 @@ export function UploadCard({ onDrop, processing }: UploadCardProps) {
         <FileUp className="w-12 h-12 text-muted-foreground" />
         <div className="text-center">
           <p className="text-lg font-medium">
-            {isDragActive ? 'Drop your PDF here' : 'Drag & drop your PDF here'}
+            {isDragActive ? 'שחרר את הקובץ כאן' : 'גרור ושחרר קובץ PDF כאן'}
           </p>
           <p className="text-sm text-muted-foreground">
-            or click to select a file
+            או לחץ לבחירת קובץ
           </p>
         </div>
       </div>

@@ -14,7 +14,7 @@ export function ProcessingIndicator({ progress }: ProcessingIndicatorProps) {
         <div className="w-full max-w-xs space-y-2">
           <Progress value={progress} className="w-full" />
           <p className="text-sm text-center text-muted-foreground">
-            Processing PDF... {progress}%
+            מעבד PDF... {progress}%
           </p>
         </div>
       </div>
